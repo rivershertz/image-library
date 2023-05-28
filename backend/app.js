@@ -24,7 +24,9 @@ app.use(express.urlencoded({extended: true}));
 // logs all requests
 app.use(requestLogger);
 
+// routing
 app.use(router);
+
 config({path: './.env'});
 
 //logs all errors
