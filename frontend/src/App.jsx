@@ -1,44 +1,20 @@
-import {useEffect, useState} from 'react';
-import api from './api';
 import Main from './components/Main';
 import ImageModal from './components/ImageModal';
+import {useSelector, useDispatch} from 'react-redux';
+import {toggle} from './features/isModalOpenSlice';
 import './App.css';
 
 function App() {
-  const [images, setImages] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentOpenImage, setCurrentOpenImage] = useState({});
-
-  useEffect(() => {
-    const getInitialImages = async () => {
-      return await api.getInitialImages();
-    };
-    getInitialImages().then((res) => setImages(res.hits));
-  }, []);
-
-  useEffect(() => {}, [images]);
-
-  const openModal = (cardData) => {
-    setIsModalOpen(true);
-    setCurrentOpenImage(cardData);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const dispatch = useDispatch();
+  const isModalOpen = useSelector((store) => store.openModal.isModalOpen);
 
   return (
-    <div className="font-primary">
-      <Main
-        initialImages={images}
-        openModal={setIsModalOpen}
-        onCardClick={openModal}
-      />
+    <div className="font-primary box-border">
+      <Main />
       {isModalOpen && (
         <ImageModal
           isOpen={isModalOpen}
-          imageData={currentOpenImage}
-          closeModal={closeModal}
+          closeModal={() => dispatch(toggle())}
         />
       )}
     </div>
